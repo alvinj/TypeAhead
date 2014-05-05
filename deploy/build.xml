@@ -1,0 +1,53 @@
+<project name="TypeAhead" default="create-bundle" basedir=".">
+
+  <taskdef name="bundleapp" classname="com.oracle.appbundler.AppBundlerTask"/>
+  <property environment="env"/>
+
+  <!-- input stuff -->
+  <property name="current.dir" value="." />
+  <!-- <property name="scala-lib.dir" value="scala-libs" /> -->
+
+  <!-- output stuff -->
+  <property name="release.dir" value="release" />
+
+  <!-- CLEAN -->
+  <target name="clean">
+      <echo message="clean task ..." />
+      <!-- just needed for the first-time setup -->
+      <mkdir dir="${release.dir}"/>
+      <!-- remove the old version of the app -->
+      <delete dir="${release.dir}/TypeAhead.app" />
+  </target>
+
+  <!-- CREATE MAC BUNDLE (new for Java7+) -->
+
+  <target name="create-bundle" depends="clean">
+  <bundleapp outputdirectory="${release.dir}"
+      name="TypeAhead"
+      displayname="Type Ahead"
+      identifier="com.alvinalexander.typeahead.TypeAhead"
+      shortversion="0.1"
+      icon="TypeAhead.icns"
+      copyright="Alvin J. Alexander"
+      applicationCategory="public.app-category.utilities"
+      mainclassname="com/alvinalexander/typeahead/TypeAhead">
+
+      <runtime dir="${env.JAVA_HOME}" />
+
+      <!-- the only jar file needed when using sbt-assembly -->
+      <classpath file="../target/scala-2.10/TypeAhead-assembly-0.1.jar" />
+
+      <!-- TODO verify that any/all of these are needed -->
+      <!-- option value="-Xdock:icon=../Resources/wiki.icns"></option -->
+      <option value="-Xdock:icon=Contents/Resources/TypeAhead.icns"/>
+      <option value="-Dapple.laf.useScreenMenuBar=true"/>
+      <option value="-Dcom.apple.macos.use-file-dialog-packages=true"/>
+      <option value="-Dcom.apple.macos.useScreenMenuBar=true"/>
+      <option value="-Dapple.awt.application.name=TypeAhead"/>
+      <option value="-Dcom.apple.smallTabs=true"/>
+
+    </bundleapp>
+  </target>
+
+</project>
+
